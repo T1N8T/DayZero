@@ -2,7 +2,6 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from pyproj import Geod
-import os
 
 def write_results(prediccion, ID_SCENARIO, ICAO, RUNWAY):
     # Crea un DataFrame con los resultados
