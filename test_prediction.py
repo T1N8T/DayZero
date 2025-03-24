@@ -1,8 +1,8 @@
-from main import main
+from main import calc_prediction
 
-def test_main(y_true_seconds:list,tol:float,modo:bool):
+def test_prediction(y_true_seconds:list,tol:float,modo:bool):
     
-    y_prediction_seconds = main()
+    y_prediction_seconds = calc_prediction()
     if len(y_prediction_seconds) != len(y_true_seconds):
         raise ValueError("The length of the lists must be the same")
     individual_scores = []
