@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from pyproj import Geod
+import os, math
 
 def write_results(prediccion, ID_SCENARIO, ICAO, RUNWAY):
     # Crea un DataFrame con los resultados
@@ -23,9 +24,14 @@ def write_results(prediccion, ID_SCENARIO, ICAO, RUNWAY):
         # Si el archivo existe, agrega los datos sin sobrescribir encabezados
         results.to_csv(file_path, mode='a', index=False, header=False)
 
-def calc_prediction():
-
-    return None
+def calc_prediction(lat_deg,lon_deg,coordinates_lat,coordinates_lon,air_speed):
+    Radius = float(6371000)
+    dlat = math.radians(coordinates_lat - lat_deg)
+    dlon = math.radians(coordinates_lon - lon_deg)
+    a = math.sin(dlat/2)^2 + math.cos(math.radians(lat_deg)) * math.cos(math.radians(coordinates_lat)) * math.sin(dlon/2)^2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    s = Radius * c / 1000;
+    return s/air_speed*3600  #Convert distance to kilometers
     
 
 def main():
@@ -75,8 +81,7 @@ def main():
         
         #Calculate the time in seconds
         print (lat_deg, long_deg, runway_lat, runway_lon,air_speed)
-        #prediction = calc_prediction(lat_deg, long_deg, runway_lat, runway_lon,air_speed)
-        prediction = 7
+        prediction = calc_prediction(lat_deg, long_deg, runway_lat, runway_lon,air_speed) 
         # Write the results
         write_results(prediction, ID_SCENARIO, ICAO, RUNWAY)
 
