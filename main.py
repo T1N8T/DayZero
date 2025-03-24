@@ -2,13 +2,30 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from pyproj import Geod
+import os
 
 def write_results(prediccion, ID_SCENARIO, ICAO, RUNWAY):
+    # Crea un DataFrame con los resultados
+    results = pd.DataFrame([{
+        'id_scenario': ID_SCENARIO,
+        'icao24': ICAO,
+        'runway': RUNWAY,
+        'seconds_to_threshold': prediccion
+    }])
 
-    return None
+    # Ruta del archivo
+    file_path = 'results/predictions.csv'
+
+    # Verifica si el archivo ya existe
+    if not os.path.exists(file_path):
+        # Si el archivo no existe, escribe con encabezados
+        results.to_csv(file_path, index=False)
+    else:
+        # Si el archivo existe, agrega los datos sin sobrescribir encabezados
+        results.to_csv(file_path, mode='a', index=False, header=False)
 
 def calc_prediction():
-    
+
     return None
     
 
@@ -16,24 +33,22 @@ def main():
     # Load the data
     predictions = pd.read_csv('samples/sample_predictions_empty.csv')
     
-    predictions_vector = []
 
-    for _, linea in predictions.iterrows():
-        predictions_vector.append(linea.tolist())
+    for _, line in predictions.iterrows():
         
-        ID_SCENARIO = predictions_vector[0]
-        ICAO = predictions_vector[1]
-        RUNWAY = predictions_vector[2]
+        ID_SCENARIO = line['id_scenario']
+        ICAO = line['icao24']
+        RUNWAY = line['runway']
         
         data = pd.read_parquet('samples/' + ID_SCENARIO + '.parquet')
-        data = data[data['ICAO'] == ICAO]
+        data = data[data['icao24'] == ICAO]
         data["datetime"] = pd.to_datetime(data["ts"], unit="ms")
 
-        columns = ['ni idea todavia']
+        columns = ['icao24','datetime']
         data = data[columns]
 
         # Calculate the time in seconds
-        prediction = calc_prediction()
+        prediction = 777888
 
         # Write the results
         write_results(prediction, ID_SCENARIO, ICAO, RUNWAY)
