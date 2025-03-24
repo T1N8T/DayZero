@@ -30,6 +30,11 @@ def calc_prediction():
     
 
 def main():
+
+    #! Elimina el archivo de resultados si ya existe
+    if os.path.exists('results/predictions.csv'):
+        os.remove('results/predictions.csv')
+
     # Load the data
     predictions = pd.read_csv('samples/sample_predictions_empty.csv')
     
