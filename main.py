@@ -48,7 +48,7 @@ def main():
         data = data[columns]
 
         # Calculate the time in seconds
-        prediction = 777888
+        prediction = calc_prediction()
 
         # Write the results
         write_results(prediction, ID_SCENARIO, ICAO, RUNWAY)
