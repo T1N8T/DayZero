@@ -51,8 +51,10 @@ def main():
         data = data[data['icao24'] == ICAO]
         data["datetime"] = pd.to_datetime(data["ts"], unit="ms")
 
-        columns = ['icao24','datetime','lat_deg','lon_deg','bds60_ias']
+        columns = ['icao24','datetime','lat_deg','lon_deg','bds60_IAS']
         data = data[columns]
+        data = data.ffill()
+        
         
         # Get the last data
         data = data[data["datetime"] == data["datetime"].max()]
@@ -62,7 +64,7 @@ def main():
         long_deg = data.iloc[0].lon_deg
 
         #Get the speed of the aircraft
-        air_speed = data.iloc[0].bds60_ias
+        air_speed = data.iloc[0].bds60_IAS
 
 
         #Get the coordinates of the runway
@@ -73,8 +75,9 @@ def main():
 
         
         #Calculate the time in seconds
-        prediction = calc_prediction(lat_deg, long_deg, runway_lat, runway_lon,air_speed)
-
+        print (lat_deg, long_deg, runway_lat, runway_lon,air_speed)
+        #prediction = calc_prediction(lat_deg, long_deg, runway_lat, runway_lon,air_speed)
+        prediction = 7
         # Write the results
         write_results(prediction, ID_SCENARIO, ICAO, RUNWAY)
 
